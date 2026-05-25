@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)file:///C:/Users/A.Alfaky/Downloads/cinema_booking_form%20(5).html -->
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>حجز سينما - Green Orbit</title>
+<link href="./index_files/css2" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo','Segoe UI',Tahoma,Arial,sans-serif;background:#f4f4f4;direction:rtl;min-height:100vh;padding:0 0 40px 0}
+.header{background:#1a5c1a;padding:16px 20px 14px;display:flex;align-items:center;gap:12px}
+.header img{width:48px;height:auto;border-radius:4px;background:white;padding:2px}
+.header-text .co{font-size:11px;color:rgba(255,255,255,.75);letter-spacing:.5px}
+.header-text .title{font-size:15px;font-weight:700;color:#fff}
+.card{background:#fff;margin:14px 14px 0;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.card-head{background:#f0f8f0;padding:12px 16px;border-bottom:1.5px solid #c8e6c8;font-size:13px;font-weight:700;color:#1a5c1a;display:flex;align-items:center;gap:6px}
+.card-body{padding:14px 16px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:5px}
+.field label span.req{color:#c0392b}
+.field input,.field select{width:100%;padding:11px 13px;border-radius:8px;border:1.5px solid #ddd;font-family:'Cairo',Arial,sans-serif;font-size:14px;color:#222;background:#fff;direction:rtl;transition:border-color .2s;-webkit-appearance:none}
+.field input:focus,.field select:focus{outline:none;border-color:#1a5c1a}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.show-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.show-opt{border:1.5px solid #ddd;border-radius:8px;padding:10px 8px;text-align:center;cursor:pointer;transition:all .15s}
+.show-opt.selected{border-color:#1a5c1a;background:#f0f8f0}
+.show-opt .sname{font-size:13px;font-weight:700;color:#1a5c1a}
+.show-opt .stime{font-size:11px;color:#666;margin-top:2px}
+.show-opt input[type=radio]{display:none}
+.terms-list{list-style:none;padding:0}
+.terms-list li{display:flex;gap:8px;font-size:12.5px;color:#444;padding:5px 0;border-bottom:1px dashed #eee;line-height:1.7}
+.terms-list li:last-child{border-bottom:none}
+.terms-list li .num{color:#1a5c1a;font-weight:700;flex-shrink:0;min-width:18px}
+.sig-wrap{border:1.5px solid #ddd;border-radius:8px;background:#fafff8;overflow:hidden;position:relative}
+canvas#sig{width:100%;height:140px;display:block;cursor:crosshair;touch-action:none}
+.sig-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;color:#bbb;pointer-events:none;text-align:center}
+.sig-hint.hidden{display:none}
+.btn-clear-sig{width:100%;padding:8px;background:#f9f9f9;border:none;border-top:1px solid #eee;font-family:'Cairo',Arial,sans-serif;font-size:12px;color:#888;cursor:pointer}
+.agree-row{display:flex;align-items:flex-start;gap:10px;padding:12px 0 0}
+.agree-row input[type=checkbox]{width:20px;height:20px;accent-color:#1a5c1a;flex-shrink:0;margin-top:2px}
+.agree-row label{font-size:13px;color:#333;line-height:1.7;cursor:pointer}
+.btn-submit{display:block;width:calc(100% - 28px);margin:16px 14px 0;padding:15px;background:#25D366;color:#fff;border:none;border-radius:12px;font-family:'Cairo',Arial,sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-align:center;letter-spacing:.3px;box-shadow:0 2px 8px rgba(37,211,102,.3);transition:background .2s}
+.btn-submit:active{background:#1da851}
+.btn-submit svg{vertical-align:-4px;margin-left:8px}
+.err{color:#c0392b;font-size:12px;margin-top:4px;display:none}
+.err.show{display:block}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a5c1a;color:#fff;padding:12px 22px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;white-space:nowrap}
+.toast.show{opacity:1}
+.footer{text-align:center;padding:20px 14px 0;font-size:11px;color:#aaa;line-height:1.8}
+
+/* Sig preview step */
+.step{display:none}
+.step.active{display:block}
+.sig-preview-card{background:#fff;margin:14px;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.08);padding:20px;text-align:center}
+.sig-preview-card h3{font-size:15px;font-weight:700;color:#1a5c1a;margin-bottom:12px}
+.sig-preview-card img{width:100%;max-height:160px;object-fit:contain;border:1.5px solid #ddd;border-radius:8px;background:#fafff8;margin-bottom:14px}
+.sig-preview-card p{font-size:13px;color:#555;margin-bottom:16px;line-height:1.8}
+.btn-send-sig{display:block;width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:10px;font-family:'Cairo',Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px}
+.btn-back{display:block;width:100%;padding:12px;background:#f0f0f0;color:#555;border:none;border-radius:10px;font-family:'Cairo',Arial,sans-serif;font-size:14px;cursor:pointer}
+.success-card{background:#fff;margin:14px;border-radius:12px;padding:30px 20px;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.success-icon{font-size:50px;margin-bottom:12px}
+.success-card h3{font-size:18px;font-weight:700;color:#1a5c1a;margin-bottom:8px}
+.success-card p{font-size:13px;color:#666;line-height:1.9}
+.ref-badge{background:#f0f8f0;border:1px solid #c8e6c8;border-radius:8px;padding:10px 16px;display:inline-block;margin:12px 0;font-size:14px;font-weight:700;color:#1a5c1a}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="data:image/png;base64,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" alt="Green Orbit">
+  <div class="header-text">
+    <div class="co">Green Orbit Facility Management Co.</div>
+    <div class="title">نموذج حجز قاعة السينما</div>
+  </div>
+</div>
+
+<!-- STEP 1: Form -->
+<div class="step active" id="step1">
+
+  <div class="card">
+    <div class="card-head">🎬 اختر العرض</div>
+    <div class="card-body">
+      <div class="show-grid" id="show-grid">
+        <label class="show-opt" onclick="selectShow(0)"><input type="radio" name="show" value="0"><div class="sname">العرض الأول</div><div class="stime">3:00م – 5:00م</div></label>
+        <label class="show-opt" onclick="selectShow(1)"><input type="radio" name="show" value="1"><div class="sname">العرض الثاني</div><div class="stime">5:15م – 7:15م</div></label>
+        <label class="show-opt" onclick="selectShow(2)"><input type="radio" name="show" value="2"><div class="sname">العرض الثالث</div><div class="stime">7:30م – 9:30م</div></label>
+        <label class="show-opt" onclick="selectShow(3)"><input type="radio" name="show" value="3"><div class="sname">الجلسة الأخيرة</div><div class="stime">9:45م – 11:00م</div></label>
+      </div>
+      <div class="err" id="err-show">يرجى اختيار العرض</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="card-head">👤 البيانات الشخصية</div>
+    <div class="card-body">
+      <div class="field">
+        <label>اسم العائلة / الساكن <span class="req">*</span></label>
+        <input type="text" id="f-name" placeholder="مثال: عائلة العمري">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>رقم الشقة <span class="req">*</span></label>
+          <input type="text" id="f-apt" placeholder="مثال: 204">
+        </div>
+        <div class="field">
+          <label>عدد الأفراد <span class="req">*</span></label>
+          <input type="number" id="f-persons" placeholder="مثال: 4" min="1" max="30">
+        </div>
+      </div>
+      <div class="field">
+        <label>رقم الهوية الوطنية <span class="req">*</span></label>
+        <input type="text" id="f-id" placeholder="10 أرقام" maxlength="10" dir="ltr" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label>رقم الجوال</label>
+        <input type="tel" id="f-phone" placeholder="05XXXXXXXX" dir="ltr" inputmode="numeric">
+      </div>
+      <div class="err" id="err-info">يرجى تعبئة جميع الحقول المطلوبة</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="card-head">📋 شروط الاستخدام</div>
+    <div class="card-body">
+      <ul class="terms-list">
+        <li><span class="num">1.</span><span>الحجز مخصص للعائلات السكنية في المجمع فقط</span></li>
+        <li><span class="num">2.</span><span>يُرجى الوصول قبل 15 دقيقة — التأخر أكثر من ربع ساعة يُلغى الحجز</span></li>
+        <li><span class="num">3.</span><span>ممنوع منعاً كلياً إدخال الطعام أو الشراب</span></li>
+        <li><span class="num">4.</span><span>ممنوع التدخين داخل القاعة</span></li>
+        <li><span class="num">5.</span><span>ممنوع العبث بإعدادات جهاز البروجكتر</span></li>
+        <li><span class="num">6.</span><span>أي تلف في الكراسي أو الأجهزة يتحمله الساكن كاملاً</span></li>
+        <li><span class="num">7.</span><span>تسليم القاعة نظيفة عند الانتهاء</span></li>
+      </ul>
+
+      <div class="field" style="margin-top:14px">
+        <label>التوقيع الإلكتروني <span class="req">*</span></label>
+        <div class="sig-wrap">
+          <canvas id="sig" width="1835" height="140"></canvas>
+          <div class="sig-hint" id="sig-hint">وقّع هنا بإصبعك</div>
+          <button class="btn-clear-sig" type="button" onclick="clearSig()">✕ مسح التوقيع</button>
+        </div>
+        <div class="err" id="err-sig">يرجى التوقيع قبل الإرسال</div>
+      </div>
+
+      <div class="agree-row">
+        <input type="checkbox" id="f-agree">
+        <label for="f-agree">أقرّ بأنني قرأت جميع الشروط والأحكام وأوافق عليها</label>
+      </div>
+      <div class="err" id="err-agree">يرجى الموافقة على الشروط</div>
+    </div>
+  </div>
+
+  <button class="btn-submit" onclick="goToStep2()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
+    التالي — إرسال للمشرف
+  </button>
+
+  <div class="footer">Green Orbit Facility Management Co.<br>Tel. 800 438 4444 | www.green-orbit.sa</div>
+</div>
+
+<!-- STEP 2: Send signature -->
+<div class="step" id="step2">
+  <div class="sig-preview-card">
+    <h3>📤 إرسال التوقيع للمشرف</h3>
+    <img id="sig-preview" src="file:///C:/Users/A.Alfaky/Downloads/cinema_booking_form%20(5).html" alt="التوقيع">
+    <p>
+      الخطوة 1: تم إرسال بيانات الحجز ✅<br>
+      الخطوة 2: اضغط الزر أدناه لإرسال <strong>صورة التوقيع</strong> للمشرف
+    </p>
+    <button class="btn-send-sig" onclick="sendSigWhatsApp()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white" style="vertical-align:-3px;margin-left:6px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
+      إرسال صورة التوقيع عبر واتساب
+    </button>
+    <button class="btn-back" onclick="goToStep3()">تم الإرسال ← إنهاء</button>
+  </div>
+</div>
+
+<!-- STEP 3: Done -->
+<div class="step" id="step3">
+  <div class="success-card">
+    <div class="success-icon">✅</div>
+    <h3>تم الحجز بنجاح!</h3>
+    <div class="ref-badge" id="final-ref"></div>
+    <p>تم إرسال بيانات الحجز والتوقيع للمشرف محمد عابد.<br>يُرجى الحضور قبل 15 دقيقة من موعد العرض.</p>
+  </div>
+  <div class="footer" style="margin-top:10px">Green Orbit Facility Management Co.<br>Tel. 800 438 4444 | www.green-orbit.sa</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SHOWS=[
+  {label:"العرض الأول",time:"3:00م – 5:00م"},
+  {label:"العرض الثاني",time:"5:15م – 7:15م"},
+  {label:"العرض الثالث",time:"7:30م – 9:30م"},
+  {label:"الجلسة الأخيرة",time:"9:45م – 11:00م"},
+];
+
+let selectedShow=-1;
+let hasSig=false;
+let sigCtx,sigCanvas;
+let currentRef="";
+
+function selectShow(i){
+  selectedShow=i;
+  document.querySelectorAll(".show-opt").forEach((el,idx)=>el.classList.toggle("selected",idx===i));
+  document.getElementById("err-show").classList.remove("show");
+}
+
+window.addEventListener("load",()=>{
+  sigCanvas=document.getElementById("sig");
+  const dpr=window.devicePixelRatio||1;
+  const w=sigCanvas.offsetWidth||320;
+  sigCanvas.width=w*dpr;
+  sigCanvas.height=140*dpr;
+  sigCtx=sigCanvas.getContext("2d");
+  sigCtx.scale(dpr,dpr);
+  sigCtx.strokeStyle="#1a5c1a";
+  sigCtx.lineWidth=2.8;
+  sigCtx.lineCap="round";
+  sigCtx.lineJoin="round";
+
+  let drawing=false;
+  const pos=(e)=>{
+    const r=sigCanvas.getBoundingClientRect();
+    if(e.touches)return{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};
+    return{x:e.clientX-r.left,y:e.clientY-r.top};
+  };
+  sigCanvas.addEventListener("pointerdown",e=>{
+    drawing=true;
+    const p=pos(e);
+    sigCtx.beginPath();sigCtx.moveTo(p.x,p.y);
+    sigCanvas.setPointerCapture(e.pointerId);
+    document.getElementById("sig-hint").classList.add("hidden");
+    e.preventDefault();
+  });
+  sigCanvas.addEventListener("pointermove",e=>{
+    if(!drawing)return;
+    const p=pos(e);
+    sigCtx.lineTo(p.x,p.y);sigCtx.stroke();
+    hasSig=true;e.preventDefault();
+  });
+  sigCanvas.addEventListener("pointerup",()=>drawing=false);
+  sigCanvas.addEventListener("pointercancel",()=>drawing=false);
+});
+
+function clearSig(){
+  const dpr=window.devicePixelRatio||1;
+  sigCtx.clearRect(0,0,sigCanvas.width/dpr,sigCanvas.height/dpr);
+  hasSig=false;
+  document.getElementById("sig-hint").classList.remove("hidden");
+}
+
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),3000);
+}
+
+function goToStep2(){
+  let valid=true;
+  if(selectedShow<0){document.getElementById("err-show").classList.add("show");valid=false;}
+  const name=document.getElementById("f-name").value.trim();
+  const apt=document.getElementById("f-apt").value.trim();
+  const persons=document.getElementById("f-persons").value.trim();
+  const idNum=document.getElementById("f-id").value.trim();
+  if(!name||!apt||!persons||!idNum){
+    document.getElementById("err-info").classList.add("show");valid=false;
+  } else {
+    document.getElementById("err-info").classList.remove("show");
+  }
+  if(!hasSig){document.getElementById("err-sig").classList.add("show");valid=false;}
+  else {document.getElementById("err-sig").classList.remove("show");}
+  if(!document.getElementById("f-agree").checked){
+    document.getElementById("err-agree").classList.add("show");valid=false;
+  } else {document.getElementById("err-agree").classList.remove("show");}
+  if(!valid){showToast("يرجى تعبئة جميع الحقول والتوقيع");return;}
+
+  const phone=document.getElementById("f-phone").value.trim()||"—";
+  const show=SHOWS[selectedShow];
+  const date=new Date().toLocaleDateString("ar-SA");
+  currentRef="BK-"+(Date.now().toString().slice(-5));
+
+  const msg=
+`🎬 *نموذج حجز سينما المجمع السكني*
+━━━━━━━━━━━━━━━━
+📋 *رقم الحجز:* ${currentRef}
+📅 *التاريخ:* ${date}
+━━━━━━━━━━━━━━━━
+🎞 *العرض:* ${show.label}
+🕐 *الوقت:* ${show.time}
+👤 *الاسم:* ${name}
+🏠 *رقم الشقة:* ${apt}
+👨‍👩‍👧‍👦 *عدد الأفراد:* ${persons}
+🪪 *رقم الهوية:* ${idNum}
+📱 *الجوال:* ${phone}
+━━━━━━━━━━━━━━━━
+✅ *وافق العميل على جميع شروط الاستخدام وقام بالتوقيع إلكترونياً.*
+_سيتم إرسال صورة التوقيع في رسالة منفصلة_
+━━━━━━━━━━━━━━━━
+_Green Orbit Facility Management Co._`;
+
+  const encoded=encodeURIComponent(msg);
+  window.open("https://wa.me/966558223304?text="+encoded,"_blank");
+
+  // Show sig preview
+  document.getElementById("sig-preview").src=sigCanvas.toDataURL("image/png");
+  document.getElementById("final-ref").textContent="رقم الحجز: "+currentRef;
+
+  // Switch step
+  document.getElementById("step1").classList.remove("active");
+  document.getElementById("step2").classList.add("active");
+  window.scrollTo(0,0);
+}
+
+function sendSigWhatsApp(){
+  // Download sig image then open WA with instruction
+  const link=document.createElement("a");
+  link.download="توقيع-"+currentRef+".png";
+  link.href=sigCanvas.toDataURL("image/png");
+  link.click();
+
+  setTimeout(()=>{
+    const msg=encodeURIComponent(`✍️ *صورة التوقيع الإلكتروني*
+📋 رقم الحجز: ${currentRef}
+_(يرجى إرفاق الصورة المحفوظة)_`);
+    window.open("https://wa.me/966558223304?text="+msg,"_blank");
+  },800);
+}
+
+function goToStep3(){
+  document.getElementById("step2").classList.remove("active");
+  document.getElementById("step3").classList.add("active");
+  window.scrollTo(0,0);
+}
+</script>
+
+</body></html>
